@@ -1,0 +1,338 @@
+﻿@* filepath: Views/Product/Details.cshtml *@
+@model _22DH113668_TranDaoDinhThuong.Models.Product
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg product-detail-card">
+                <div class="card-header gradient-pink-details">
+                    <h2 class="mb-0 d-flex align-items-center text-white">
+                        <i class="fas fa-heart me-3 text-warning heartbeat"></i>
+                        Chi tiết sản phẩm thể thao
+                        <i class="fas fa-star ms-auto text-warning sparkle"></i>
+                    </h2>
+                </div>
+
+                <div class="card-body p-4">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <div class="row">
+                        <!-- Thông tin chính -->
+                        <div class="col-md-8">
+                            <div class="product-info">
+                                <div class="product-title mb-4 pink-glow">
+                                    <h3 class="text-pink fw-bold mb-2">@Model.NamePro</h3>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge badge-id-details me-2">#@Model.ProductId</span>
+                                        <span class="badge badge-category-details">@Model.Category</span>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-sm-6">
+                                        <div class="info-card p-3 pink-card rounded-3">
+                                            <div class="info-header d-flex align-items-center mb-2">
+                                                <i class="fas fa-calendar-heart text-pink me-2"></i>
+                                                <strong class="text-muted">Ngày sản xuất</strong>
+                                            </div>
+                                            <div class="info-value">
+                                                @Model.ManufacturingDate.ToString("dd/MM/yyyy")
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @if (Model.Price.HasValue)
+                                    {
+                                        <div class="col-sm-6">
+                                            <div class="info-card p-3 pink-card rounded-3">
+                                                <div class="info-header d-flex align-items-center mb-2">
+                                                    <i class="fas fa-gem text-success me-2"></i>
+                                                    <strong class="text-muted">Giá bán</strong>
+                                                </div>
+                                                <div class="info-value text-success fw-bold fs-5 price-glow">
+                                                    @Model.Price.Value.ToString("N0") VND
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(Model.ImagePro))
+                                    {
+                                        <div class="col-12">
+                                            <div class="info-card p-3 pink-card rounded-3">
+                                                <div class="info-header d-flex align-items-center mb-3">
+                                                    <i class="fas fa-images text-warning me-2"></i>
+                                                    <strong class="text-muted">Hình ảnh sản phẩm</strong>
+                                                </div>
+                                                <div class="info-value text-center">
+                                                    <img src="@Model.ImagePro" alt="@Model.NamePro" 
+                                                         class="img-fluid rounded-4 shadow-lg product-image-details"
+                                                         style="max-width: 100%; max-height: 300px; object-fit: contain;" 
+                                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                                                    <div class="text-muted" style="display: none;">
+                                                        <i class="fas fa-heart-broken fa-2x mb-2 text-pink"></i>
+                                                        <p>Không thể tải hình ảnh</p>
+                                                        <small>Đường dẫn: <code>@Model.ImagePro</code></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mô tả sản phẩm -->
+                        <div class="col-md-4">
+                            <div class="description-section h-100">
+                                <div class="card border-0 pink-card-light h-100 rounded-4">
+                                    <div class="card-header bg-transparent border-0">
+                                        <h5 class="mb-0 d-flex align-items-center text-pink">
+                                            <i class="fas fa-scroll text-info me-2"></i>
+                                            Mô tả sản phẩm
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        @if (!string.IsNullOrEmpty(Model.DecriptionPro))
+                                        {
+                                            <p class="mb-0 description-text">@Model.DecriptionPro</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted fst-italic mb-0">
+                                                <i class="fas fa-heart me-2"></i>
+                                                Chưa có mô tả cho sản phẩm này.
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer pink-footer border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-3">
+                            <a asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-edit-details btn-lg">
+                                <i class="fas fa-magic me-2"></i>
+                                Chỉnh sửa sản phẩm
+                            </a>
+                            <a asp-controller="Product" asp-action="Index" class="btn btn-home-details">
+                                <i class="fas fa-home me-2"></i>
+                                Trang chủ
+                            </a>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fas fa-crown text-warning me-1"></i>
+                            Sản phẩm đặc biệt
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #ffeef8 0%, #f8e8ff 50%, #ffe8f0 100%);
+        min-height: 100vh;
+    }
+
+    .product-detail-card {
+        border: none;
+        border-radius: 25px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+    }
+
+    .gradient-pink-details {
+        background: linear-gradient(135deg, #ff6b9d 0%, #c44ce8 50%, #ff8a80 100%);
+        border: none;
+        padding: 1.5rem;
+    }
+
+    .heartbeat {
+        animation: heartbeat 2s infinite;
+    }
+
+    .sparkle {
+        animation: sparkle 1.5s infinite;
+    }
+
+    @@keyframes heartbeat {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+    }
+
+    @@keyframes sparkle {
+        0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.8; }
+        50% { transform: rotate(180deg) scale(1.3); opacity: 1; }
+    }
+
+    .text-pink {
+        color: #e91e63 !important;
+    }
+
+    .pink-glow {
+        text-shadow: 0 0 10px rgba(233, 30, 99, 0.3);
+    }
+
+    .badge-id-details {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: 600;
+    }
+
+    .badge-category-details {
+        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        color: #444;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .pink-card {
+        background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%);
+        border: 2px solid rgba(255, 182, 193, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .pink-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(255, 107, 157, 0.2);
+        border-color: rgba(255, 107, 157, 0.5);
+    }
+
+    .pink-card-light {
+        background: linear-gradient(135deg, #fff5f8 0%, #fdf2f8 100%);
+        border: 2px solid rgba(255, 182, 193, 0.2);
+    }
+
+    .info-header {
+        font-size: 0.9rem;
+    }
+
+    .info-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .price-glow {
+        text-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+    }
+
+    .product-image-details {
+        transition: all 0.4s ease;
+        cursor: pointer;
+        border: 3px solid rgba(255, 182, 193, 0.3);
+    }
+
+    .product-image-details:hover {
+        transform: scale(1.08) rotate(2deg);
+        box-shadow: 0 20px 40px rgba(255, 107, 157, 0.3);
+        border-color: rgba(255, 107, 157, 0.6);
+    }
+
+    .description-text {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: #666;
+        background: linear-gradient(135deg, #e91e63, #9c27b0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .pink-footer {
+        background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%);
+        padding: 1.5rem;
+    }
+
+    .btn-edit-details {
+        background: linear-gradient(135deg, #ff6b9d 0%, #c44ce8 100%);
+        border: none;
+        color: white;
+        border-radius: 15px;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-edit-details:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 25px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+
+    .btn-home-details {
+        background: linear-gradient(135deg, #ffeef8 0%, #e1bee7 100%);
+        border: 2px solid rgba(255, 107, 157, 0.3);
+        color: #e91e63;
+        border-radius: 15px;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .btn-home-details:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
+        color: #e91e63;
+        border-color: rgba(255, 107, 157, 0.6);
+        background: linear-gradient(135deg, #fff0f5 0%, #f3e5f5 100%);
+    }
+
+    /* Floating particles */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(2px 2px at 30px 40px, rgba(255, 107, 157, 0.4), transparent),
+            radial-gradient(3px 3px at 60px 80px, rgba(196, 76, 232, 0.3), transparent),
+            radial-gradient(1px 1px at 100px 50px, rgba(255, 138, 128, 0.4), transparent);
+        background-repeat: repeat;
+        background-size: 100px 120px;
+        animation: floatParticles 25s linear infinite;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    @@keyframes floatParticles {
+        from { transform: translateY(0) rotate(0deg); }
+        to { transform: translateY(-120px) rotate(360deg); }
+    }
+
+    /* Glowing text effect */
+    .product-title h3 {
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @@keyframes glow {
+        from { text-shadow: 0 0 5px rgba(233, 30, 99, 0.5); }
+        to { text-shadow: 0 0 20px rgba(233, 30, 99, 0.8), 0 0 30px rgba(233, 30, 99, 0.6); }
+    }
+</style>

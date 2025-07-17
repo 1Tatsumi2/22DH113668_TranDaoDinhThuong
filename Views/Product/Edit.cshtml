@@ -1,0 +1,594 @@
+﻿@* filepath: Views/Product/Edit.cshtml *@
+@model _22DH113668_TranDaoDinhThuong.Models.ViewModels.ProductEditViewModel
+
+@{
+    ViewData["Title"] = "Chỉnh sửa sản phẩm";
+}
+
+<div class="container-fluid mt-4 px-4">
+    <div class="row justify-content-center">
+        <div class="col-md-11 col-lg-10">
+            <div class="card shadow-lg edit-card">
+                <div class="card-header gradient-pink-edit">
+                    <h2 class="mb-0 d-flex align-items-center text-white">
+                        <i class="fas fa-magic me-3 text-warning sparkle-icon"></i>
+                        Chỉnh sửa thông tin sản phẩm
+                        <div class="ms-auto header-gems">
+                            <i class="fas fa-gem text-warning me-2"></i>
+                            <i class="fas fa-heart text-warning me-2"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                    </h2>
+                </div>
+
+                <form asp-action="Edit" method="post" id="editForm" novalidate enctype="multipart/form-data">
+                    <div class="card-body p-4">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Vui lòng kiểm tra lại thông tin:</strong>
+                        </div>
+
+                        <input asp-for="ProductId" type="hidden" />
+
+                        <div class="row g-4">
+                            <!-- Cột trái -->
+                            <div class="col-md-6">
+                                <div class="form-section pink-section">
+                                    <h5 class="section-title mb-3">
+                                        <i class="fas fa-heart text-pink me-2 pulse"></i>
+                                        Thông tin cơ bản
+                                    </h5>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="NamePro" class="form-label fw-bold required"></label>
+                                        <input asp-for="NamePro" class="form-control form-control-lg" placeholder="Nhập tên sản phẩm..." />
+                                        <span asp-validation-for="NamePro" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="Category" class="form-label fw-bold required"></label>
+                                        @await Component.InvokeAsync("CategorySelector", new { selectedCategory = Model.Category })
+                                        <span asp-validation-for="Category" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="ManufacturingDate" class="form-label fw-bold required"></label>
+                                        <input asp-for="ManufacturingDate" type="date" class="form-control form-control-lg"
+                                               value="@Model.ManufacturingDate.ToString("yyyy-MM-dd")" />
+                                        <span asp-validation-for="ManufacturingDate" class="text-danger"></span>
+                                        <div class="form-text">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Ngày sản xuất không được là ngày tương lai
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cột phải -->
+                            <div class="col-md-6">
+                                <div class="form-section pink-section">
+                                    <h5 class="section-title mb-3">
+                                        <i class="fas fa-sparkles text-success me-2 sparkle"></i>
+                                        Thông tin bổ sung
+                                    </h5>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="Price" class="form-label fw-bold"></label>
+                                        <div class="input-group input-group-lg">
+                                            <span class="input-group-text bg-light">
+                                                <i class="fas fa-dong-sign"></i>
+                                            </span>
+                                            <input asp-for="Price" type="number" step="1" min="1" class="form-control"
+                                                   placeholder="Nhập giá sản phẩm..." />
+                                            <span class="input-group-text bg-light">VND</span>
+                                        </div>
+                                        <span asp-validation-for="Price" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="ImagePro" class="form-label fw-bold"></label>
+                                        
+                                        <!-- Tab navigation -->
+                                        <ul class="nav nav-tabs mb-3" id="imageTab" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link active" id="url-tab" data-bs-toggle="tab" data-bs-target="#url-content" type="button" role="tab">
+                                                    <i class="fas fa-link me-1"></i> URL
+                                                </button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-content" type="button" role="tab">
+                                                    <i class="fas fa-upload me-1"></i> Upload File
+                                                </button>
+                                            </li>
+                                        </ul>
+
+                                        <!-- Tab content -->
+                                        <div class="tab-content" id="imageTabContent">
+                                            <!-- URL Tab -->
+                                            <div class="tab-pane fade show active" id="url-content" role="tabpanel">
+                                                <input asp-for="ImagePro" class="form-control form-control-lg"
+                                                       placeholder="Nhập URL hình ảnh..." />
+                                                <div class="form-text">
+                                                    <i class="fas fa-link me-1"></i>
+                                                    Nhập đường dẫn URL của hình ảnh
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Upload Tab -->
+                                            <div class="tab-pane fade" id="upload-content" role="tabpanel">
+                                                <input type="file" name="ImageFile" id="imageFile" class="form-control form-control-lg" 
+                                                       accept="image/*" />
+                                                <div class="form-text">
+                                                    <i class="fas fa-image me-1"></i>
+                                                    Chọn file hình ảnh từ máy tính (JPG, PNG, GIF)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <span asp-validation-for="ImagePro" class="text-danger"></span>
+                                        
+                                        <!-- Preview area -->
+                                        <div id="imagePreview" class="mt-3" style="display: none;">
+                                            <label class="form-label">Xem trước:</label>
+                                            <div class="border rounded p-2">
+                                                <img id="previewImg" src="" alt="Preview" class="img-thumbnail" style="max-width: 200px; max-height: 200px;" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="DecriptionPro" class="form-label fw-bold"></label>
+                                        <textarea asp-for="DecriptionPro" class="form-control" rows="4"
+                                                  placeholder="Nhập mô tả chi tiết về sản phẩm..."></textarea>
+                                        <span asp-validation-for="DecriptionPro" class="text-danger"></span>
+                                        <div class="form-text">
+                                            <span id="charCount">0</span>/500 ký tự
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer pink-footer border-0 p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a asp-action="Details" class="btn btn-back-edit btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Quay lại
+                            </a>
+
+                            <div class="d-flex gap-3">
+                                <button type="reset" class="btn btn-reset-edit btn-lg">
+                                    <i class="fas fa-undo me-2"></i>
+                                    Đặt lại
+                                </button>
+                                <button type="submit" class="btn btn-save-edit btn-lg">
+                                    <i class="fas fa-save me-2"></i>
+                                    Lưu thay đổi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function() {
+            // Set max date to today
+            var today = new Date().toISOString().split('T')[0];
+            $('input[type="date"]').attr('max', today);
+
+            // Character counter for description
+            $('#DecriptionPro').on('input', function() {
+                var length = $(this).val().length;
+                $('#charCount').text(length);
+
+                if (length > 500) {
+                    $('#charCount').addClass('text-danger');
+                } else {
+                    $('#charCount').removeClass('text-danger');
+                }
+            });
+
+            // Trigger character count on page load
+            $('#DecriptionPro').trigger('input');
+
+            // Image preview functionality
+            $('#imageFile').on('change', function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#previewImg').attr('src', e.target.result);
+                        $('#imagePreview').show();
+                    };
+                    reader.readAsDataURL(file);
+                    
+                    // Clear URL input when file is selected
+                    $('#ImagePro').val('');
+                } else {
+                    $('#imagePreview').hide();
+                }
+            });
+
+            // Image URL preview
+            $('#ImagePro').on('input', function() {
+                var url = $(this).val();
+                if (url && isValidImageUrl(url)) {
+                    $('#previewImg').attr('src', url);
+                    $('#imagePreview').show();
+                    
+                    // Clear file input when URL is entered
+                    $('#imageFile').val('');
+                } else {
+                    $('#imagePreview').hide();
+                }
+            });
+
+            // Check if current image exists on page load
+            var currentImageUrl = $('#ImagePro').val();
+            if (currentImageUrl) {
+                $('#previewImg').attr('src', currentImageUrl);
+                $('#imagePreview').show();
+            }
+
+            // Function to validate image URL
+            function isValidImageUrl(url) {
+                return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url) || url.startsWith('http');
+            }
+
+            // Form validation
+            $('#editForm').on('submit', function(e) {
+                var manufacturingDate = new Date($('#ManufacturingDate').val());
+                var today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (manufacturingDate > today) {
+                    e.preventDefault();
+                    showAlert('Lỗi ngày sản xuất', 'Ngày sản xuất không được là ngày tương lai!', 'error');
+                    return false;
+                }
+
+                // Check if category is selected
+                var category = $('#Category').val();
+                if (!category) {
+                    e.preventDefault();
+                    showAlert('Lỗi loại sản phẩm', 'Vui lòng chọn loại sản phẩm!', 'error');
+                    return false;
+                }
+            });
+
+            // Show alert function
+            function showAlert(title, message, type) {
+                var alertClass = type === 'error' ? 'alert-danger' : 'alert-success';
+                var icon = type === 'error' ? 'fa-exclamation-triangle' : 'fa-check-circle';
+
+                var alertHtml = `
+                    <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                        <i class="fas ${icon} me-2"></i>
+                        <strong>${title}:</strong> ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+
+                $('.card-body').prepend(alertHtml);
+
+                // Auto dismiss after 5 seconds
+                setTimeout(function() {
+                    $('.alert').alert('close');
+                }, 5000);
+            }
+        });
+    </script>
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #ffeef8 0%, #f8e8ff 50%, #ffe8f0 100%);
+        min-height: 100vh;
+    }
+
+    .edit-card {
+        border: none;
+        border-radius: 25px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+    }
+
+    .gradient-pink-edit {
+        background: linear-gradient(135deg, #ff6b9d 0%, #c44ce8 50%, #ff8a80 100%);
+        border: none;
+        padding: 1.5rem;
+    }
+
+    .sparkle-icon {
+        animation: sparkleRotate 2s infinite;
+    }
+
+    .header-gems {
+        animation: gemFloat 3s ease-in-out infinite;
+    }
+
+    @@keyframes sparkleRotate {
+        0%, 100% { transform: rotate(0deg) scale(1); }
+        50% { transform: rotate(15deg) scale(1.2); }
+    }
+
+    @@keyframes gemFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    .pink-section {
+        background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%);
+        padding: 2rem;
+        border-radius: 20px;
+        border: 2px solid rgba(255, 182, 193, 0.3);
+        height: 100%;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pink-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 182, 193, 0.1) 0%, transparent 70%);
+        animation: sectionGlow 4s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    @@keyframes sectionGlow {
+        0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.5; }
+        50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+    }
+
+    .pink-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(255, 107, 157, 0.2);
+        border-color: rgba(255, 107, 157, 0.5);
+    }
+
+    .section-title {
+        font-weight: 700;
+        color: #e91e63;
+        border-bottom: 3px solid rgba(255, 107, 157, 0.3);
+        padding-bottom: 0.8rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .text-pink {
+        color: #e91e63 !important;
+    }
+
+    .pulse {
+        animation: pulse 2s infinite;
+    }
+
+    .sparkle {
+        animation: sparkle 1.5s infinite;
+    }
+
+    @@keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.8; }
+        50% { transform: scale(1.3); opacity: 1; }
+    }
+
+    @@keyframes sparkle {
+        0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.7; }
+        33% { transform: rotate(120deg) scale(1.2); opacity: 1; }
+        66% { transform: rotate(240deg) scale(0.9); opacity: 0.8; }
+    }
+
+    .form-label.required::after {
+        content: " ✨";
+        color: #ff6b9d;
+        font-weight: bold;
+        animation: twinkle 1s infinite;
+    }
+
+    @@keyframes twinkle {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .form-control, .form-select {
+        border: 2px solid rgba(255, 182, 193, 0.3);
+        border-radius: 15px;
+        padding: 0.8rem 1rem;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+        position: relative;
+        z-index: 1;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #ff6b9d;
+        box-shadow: 0 0 0 0.3rem rgba(255, 107, 157, 0.25);
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-2px);
+    }
+
+    .input-group-text {
+        border: 2px solid rgba(255, 182, 193, 0.3);
+        background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%);
+        color: #e91e63;
+        border-radius: 15px;
+        font-weight: 600;
+    }
+
+    .nav-tabs {
+        border: none;
+        background: linear-gradient(135deg, #ffeef8 0%, #f8e8ff 100%);
+        border-radius: 15px;
+        padding: 0.3rem;
+    }
+
+    .nav-tabs .nav-link {
+        border: none;
+        border-radius: 12px;
+        color: #e91e63;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .nav-tabs .nav-link.active {
+        background: linear-gradient(135deg, #ff6b9d 0%, #c44ce8 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+    }
+
+    .tab-content {
+        padding: 1rem 0;
+    }
+
+    #imagePreview {
+        border: 2px dashed rgba(255, 107, 157, 0.3);
+        border-radius: 15px;
+        padding: 1rem;
+        background: linear-gradient(135deg, #fff5f8 0%, #fdf2f8 100%);
+    }
+
+    #previewImg {
+        border: 3px solid rgba(255, 107, 157, 0.3);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    #previewImg:hover {
+        transform: scale(1.05) rotate(2deg);
+        border-color: #ff6b9d;
+        box-shadow: 0 10px 25px rgba(255, 107, 157, 0.3);
+    }
+
+    .pink-footer {
+        background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%);
+        border-top: 2px solid rgba(255, 182, 193, 0.3);
+    }
+
+    .btn-back-edit {
+        background: linear-gradient(135deg, #ffeef8 0%, #e1bee7 100%);
+        border: 2px solid rgba(255, 107, 157, 0.3);
+        color: #e91e63;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+    .btn-back-edit:hover {
+        transform: translateY(-3px) translateX(-5px);
+        box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
+        color: #e91e63;
+        border-color: rgba(255, 107, 157, 0.6);
+    }
+
+    .btn-reset-edit {
+        background: linear-gradient(135deg, #ffd1dc 0%, #ffb3d9 100%);
+        border: 2px solid rgba(255, 107, 157, 0.4);
+        color: #c2185b;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+    .btn-reset-edit:hover {
+        transform: translateY(-3px) rotate(-2deg);
+        box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
+        color: #c2185b;
+        background: linear-gradient(135deg, #ffcccb 0%, #ffb6c1 100%);
+    }
+
+    .btn-save-edit {
+        background: linear-gradient(135deg, #ff6b9d 0%, #c44ce8 100%);
+        border: none;
+        color: white;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-save-edit::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-save-edit:hover::before {
+        left: 100%;
+    }
+
+    .btn-save-edit:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 12px 30px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+
+    .alert {
+        border: none;
+        border-radius: 15px;
+        border-left: 5px solid #ff6b9d;
+        background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%);
+    }
+
+    #charCount {
+        font-weight: 600;
+        color: #e91e63;
+    }
+
+    #charCount.text-danger {
+        color: #dc3545 !important;
+        animation: shake 0.5s;
+    }
+
+    @@keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    /* Floating hearts background */
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(3px 3px at 25px 35px, rgba(255, 107, 157, 0.3), transparent),
+            radial-gradient(2px 2px at 70px 85px, rgba(196, 76, 232, 0.2), transparent),
+            radial-gradient(4px 4px at 120px 45px, rgba(255, 138, 128, 0.3), transparent);
+        background-repeat: repeat;
+        background-size: 150px 180px;
+        animation: floatingHearts 30s linear infinite;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    @@keyframes floatingHearts {
+        from { transform: translateY(100vh) rotate(0deg); }
+        to { transform: translateY(-10vh) rotate(360deg); }
+    }
+</style>
